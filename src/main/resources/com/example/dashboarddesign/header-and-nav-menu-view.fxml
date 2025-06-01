@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1300.0" style="-fx-background-color: #ededed;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboarddesign.HeaderAndNavMenuViewController">
+    <children>
+        <AnchorPane prefHeight="652.0" prefWidth="354.0" style="-fx-background-color: #537D5D; -fx-background-radius: 25;">
+            <children>
+                <AnchorPane layoutX="14.0" layoutY="4.0" prefHeight="92.0" prefWidth="316.0" style="-fx-background-color: white; -fx-background-radius: 30;">
+                    <children>
+                        <Label layoutX="95.0" layoutY="25.0" text="BMA System">
+                            <font>
+                                <Font name="Bell MT" size="37.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+                <ImageView fitHeight="80.0" fitWidth="97.0" layoutX="22.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/bma.png" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="37.0" layoutY="101.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/6821002.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="DashboardMenuLabel" layoutX="103.0" layoutY="105.0" prefHeight="50.0" prefWidth="198.0" text="Dashboard" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="35.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/65545434.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="CadetMenuLabel" layoutX="104.0" layoutY="168.0" prefHeight="50.0" prefWidth="198.0" text="Cadet" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="35.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/1055644.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="ReportsMenuLabel" layoutX="104.0" layoutY="226.0" prefHeight="50.0" prefWidth="198.0" text="Reports" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="35.0" layoutY="296.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/219988.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="UserMenuLabel" layoutX="103.0" layoutY="298.0" prefHeight="50.0" prefWidth="198.0" text="User" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="35.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/43542342.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="SettingsMenuLabel" layoutX="103.0" layoutY="367.0" prefHeight="50.0" prefWidth="198.0" text="System Settings" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="35.0" layoutY="435.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/462642.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="LogsMenuLabel" layoutX="103.0" layoutY="440.0" prefHeight="50.0" prefWidth="198.0" text="Audit Logs" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <ImageView fitHeight="62.0" fitWidth="80.0" layoutX="36.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/219983.png" />
+                    </image>
+                </ImageView>
+                <Label fx:id="ProfileMenuLabel" layoutX="104.0" layoutY="508.0" prefHeight="50.0" prefWidth="198.0" text="Profile" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="30.0" />
+                    </font>
+                </Label>
+                <Label alignment="CENTER" layoutX="90.0" layoutY="590.0" prefHeight="17.0" prefWidth="178.0" text="Logout" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Eras Bold ITC" size="30.0" />
+                    </font>
+                </Label>
+                <Separator layoutX="82.0" layoutY="624.0" prefWidth="200.0" style="-fx-background-color: black;" />
+                <Button fx:id="DashboardMenuButton" alignment="TOP_LEFT" layoutX="31.0" layoutY="103.0" mnemonicParsing="false" onAction="#DashboardMenuButtonOnAction" prefHeight="52.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;" textFill="#f8f8f8">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="CadetMenuButton" layoutX="32.0" layoutY="164.0" mnemonicParsing="false" onAction="#CadetMenuButtonOnAction" prefHeight="52.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="ReportsMenuButton" layoutX="31.0" layoutY="225.0" mnemonicParsing="false" onAction="#ReportsMenuButtonOnAction" prefHeight="63.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="UsersMenuButton" layoutX="32.0" layoutY="295.0" mnemonicParsing="false" onAction="#UsersMenuButtonOnAction" prefHeight="63.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="SystemSettingsMenuButton" layoutX="32.0" layoutY="366.0" mnemonicParsing="false" onAction="#SystemSettingsMenuButtonOnAction" prefHeight="63.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="AuditLogsMenuButton" layoutX="32.0" layoutY="434.0" mnemonicParsing="false" onAction="#AuditLogsMenuButtonOnAction" prefHeight="63.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="ProfileMenuButton" layoutX="32.0" layoutY="507.0" mnemonicParsing="false" onAction="#ProfileMenuButtonOnAction" prefHeight="63.0" prefWidth="322.0" style="-fx-background-color: transparent; -fx-border-color: black; -fx-border-radius: 20;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Button fx:id="LogoutButton" layoutX="73.0" layoutY="578.0" mnemonicParsing="false" onAction="#LogoutButtonOnAction" prefHeight="63.0" prefWidth="215.0" style="-fx-background-color: transparent;">
+                    <opaqueInsets>
+                        <Insets />
+                    </opaqueInsets>
+                </Button>
+                <Line endX="291.0" endY="1.0" layoutX="62.0" layoutY="157.0" startX="-61.99998474121094" startY="1.0" />
+                <Line endX="291.0" endY="1.0" layoutX="62.0" layoutY="218.0" startX="-61.99998474121094" startY="1.0" />
+                <Line endX="291.0" endY="1.0" layoutX="58.0" layoutY="289.0" startX="-61.99998474121094" startY="1.0" />
+                <Line endX="291.0" endY="1.0" layoutX="64.0" layoutY="362.0" startX="-61.99998474121094" startY="1.0" />
+                <Line endX="291.0" endY="1.0" layoutX="63.0" layoutY="429.0" startX="-61.99998474121094" startY="1.0" />
+                <Line endX="291.0" endY="1.0" layoutX="63.0" layoutY="501.0" startX="-61.99998474121094" startY="1.0" />
+                <Line endX="291.0" endY="1.0" layoutX="60.0" layoutY="573.0" startX="-61.99998474121094" startY="1.0" />
+            </children>
+        </AnchorPane>
+        <Pane layoutX="360.0" layoutY="12.0" prefHeight="100.0" prefWidth="934.0" style="-fx-background-color: #18230F; -fx-background-radius: 25;">
+            <children>
+                <Label fx:id="dashBoardLabel" layoutX="20.0" layoutY="23.0" prefHeight="66.0" prefWidth="429.0" text="Dashboard" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Berlin Sans FB" size="45.0" />
+                    </font>
+                </Label>
+                <TextField layoutX="507.0" layoutY="30.0" promptText="    Search">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </TextField>
+                <ImageView fitHeight="80.0" fitWidth="97.0" layoutX="828.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/219983.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </Pane>
+        <AnchorPane fx:id="mainAnchor" layoutX="357.0" layoutY="118.0" prefHeight="532.0" prefWidth="940.0" style="-fx-background-color: #9EBC8A; -fx-background-radius: 20;" />
+    </children>
+</AnchorPane>
