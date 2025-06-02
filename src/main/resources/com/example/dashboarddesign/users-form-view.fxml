@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -17,76 +17,56 @@
             <Font name="Book Antiqua Bold" size="30.0" />
          </font>
       </Label>
-      <TableView layoutX="18.0" layoutY="61.0" prefHeight="291.0" prefWidth="903.0" style="-fx-background-color: #F0F1C5;">
-        <columns>
-          <TableColumn prefWidth="73.66667175292969" text="ID" />
-          <TableColumn prefWidth="167.3333282470703" text="Name" />
-            <TableColumn prefWidth="132.6666717529297" text="Username" />
-            <TableColumn prefWidth="167.66668701171875" text="Email" />
-            <TableColumn prefWidth="124.66668701171875" text="Password" />
-            <TableColumn prefWidth="139.66668701171875" text="Role" />
-            <TableColumn prefWidth="96.33331298828125" text="Status" />
-        </columns>
+      <TableView fx:id="UserDataEntryTable" layoutX="11.0" layoutY="61.0" prefHeight="230.0" prefWidth="913.0" style="-fx-background-color: #F0F1C5;">
+         <columns>
+            <TableColumn fx:id="userColumnID" prefWidth="80.0" text="ID" />
+            <TableColumn fx:id="userColumnName" prefWidth="124.66667175292969" text="Name" />
+            <TableColumn fx:id="userColumnEmail" prefWidth="163.0" text="Email" />
+            <TableColumn fx:id="userColumnUserName" prefWidth="100.0" text="Username" />
+            <TableColumn fx:id="userColumnPassword" prefWidth="112.33331298828125" text="Password" />
+            <TableColumn fx:id="userColumnRole" prefWidth="94.33331298828125" text="Role" />
+            <TableColumn fx:id="userColumnStatus" prefWidth="76.0" text="Status" />
+            <TableColumn fx:id="userColumnType" minWidth="0.0" prefWidth="79.6666259765625" text="Type" />
+            <TableColumn fx:id="userColumnBatch" prefWidth="95.0" text="Batch" />
+         </columns>
       </TableView>
-      <Pane layoutX="15.0" layoutY="356.0" prefHeight="172.0" prefWidth="578.0" style="-fx-background-color: #F0F1C5; -fx-background-radius: 30;">
+      <Pane layoutX="18.0" layoutY="325.0" prefHeight="175.0" prefWidth="617.0" style="-fx-background-color: #F0F1C5; -fx-background-radius: 30;">
          <children>
-            <TextField layoutX="9.0" layoutY="5.0" prefHeight="40.0" prefWidth="116.0" promptText="ID" style="-fx-background-radius: 20;">
-               <font>
-                  <Font size="27.0" />
-               </font>
-            </TextField>
-            <TextField layoutX="129.0" layoutY="5.0" prefHeight="57.0" prefWidth="233.0" promptText="Name" style="-fx-background-radius: 20;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField layoutX="368.0" layoutY="6.0" prefHeight="57.0" prefWidth="196.0" promptText="Email" style="-fx-background-radius: 20;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField layoutX="1.0" layoutY="77.0" prefHeight="57.0" prefWidth="155.0" promptText="Username" style="-fx-background-radius: 20;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <TextField layoutX="160.0" layoutY="77.0" prefHeight="57.0" prefWidth="175.0" promptText="Password" style="-fx-background-radius: 20;">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </TextField>
-            <CheckBox layoutX="352.0" layoutY="67.0" mnemonicParsing="false" text="Admin" />
-            <CheckBox layoutX="352.0" layoutY="91.0" mnemonicParsing="false" text="Commandant" />
-            <CheckBox layoutX="353.0" layoutY="115.0" mnemonicParsing="false" text="Instructor" />
-            <CheckBox layoutX="354.0" layoutY="140.0" mnemonicParsing="false" text="Logistics Officer" />
-            <CheckBox layoutX="469.0" layoutY="69.0" mnemonicParsing="false" text="Drill Sergeant" />
-            <CheckBox layoutX="468.0" layoutY="92.0" mnemonicParsing="false" text="Cadet" />
-            <CheckBox layoutX="469.0" layoutY="117.0" mnemonicParsing="false" text="Medical Officer" />
-            <CheckBox layoutX="469.0" layoutY="140.0" mnemonicParsing="false" text="Mess Officer" />
-            <CheckBox layoutX="39.0" layoutY="143.0" mnemonicParsing="false" text="Active" />
-            <CheckBox layoutX="156.0" layoutY="145.0" mnemonicParsing="false" text="Deactivate" />
+            <TextField fx:id="UserIDTextfield" layoutX="10.0" layoutY="17.0" prefHeight="40.0" prefWidth="120.0" promptText="ID" style="-fx-background-radius: 20;" />
+            <TextField fx:id="UserNameTextfield" layoutX="140.0" layoutY="17.0" prefHeight="40.0" prefWidth="200.0" promptText="Name" style="-fx-background-radius: 20;" />
+            <TextField fx:id="UserEmailTextfield" layoutX="350.0" layoutY="17.0" prefHeight="40.0" prefWidth="250.0" promptText="Email" style="-fx-background-radius: 20;" />
+
+            <ComboBox fx:id="userTypeComboBox" layoutX="10.0" layoutY="67.0" prefWidth="150.0" promptText="Select Type" style="-fx-background-radius: 20;" />
+
+            <TextField fx:id="UserUserNameTextfield" layoutX="170.0" layoutY="67.0" prefHeight="40.0" prefWidth="180.0" promptText="Username" style="-fx-background-radius: 20;" />
+            <TextField fx:id="UserUserPasswordTextfield" layoutX="360.0" layoutY="67.0" prefHeight="40.0" prefWidth="180.0" promptText="Password" style="-fx-background-radius: 20;" />
+
+            <ComboBox fx:id="userRoleComboBox" layoutX="10.0" layoutY="117.0" prefWidth="200.0" promptText="Select Role" style="-fx-background-radius: 20;" />
+            <ComboBox fx:id="userStatusComboBox" layoutX="220.0" layoutY="117.0" prefWidth="200.0" promptText="Select Status" style="-fx-background-radius: 20;" />
+
+            <TextField fx:id="UserBatchTextfield" layoutX="430.0" layoutY="110.0" prefHeight="40.0" prefWidth="180.0" promptText="Batch" style="-fx-background-radius: 20;" visible="false" />
          </children>
       </Pane>
-      <Pane layoutX="600.0" layoutY="360.0" prefHeight="166.0" prefWidth="327.0" style="-fx-background-radius: 20;">
+      <Pane layoutX="631.0" layoutY="327.0" prefHeight="167.0" prefWidth="258.0" style="-fx-background-radius: 20;">
          <children>
-            <Button fx:id="CadetAddButton" layoutX="8.0" layoutY="9.0" mnemonicParsing="false" onAction="#CadetAddButtonOnAction" prefHeight="68.0" prefWidth="148.0" style="-fx-background-radius: 30;" text="Add">
+            <Button fx:id="UserAddButton" layoutX="10.0" layoutY="20.0" mnemonicParsing="false" onAction="#UserAddButtonOnAction" prefHeight="60.0" prefWidth="140.0" style="-fx-background-radius: 30;" text="Add">
                <font>
-                  <Font name="Book Antiqua" size="24.0" />
+                  <Font name="Book Antiqua" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="CadetUpdateButtonOnAction" layoutX="165.0" layoutY="8.0" mnemonicParsing="false" onAction="#CadetUpdateButtonOnAction" prefHeight="68.0" prefWidth="148.0" style="-fx-background-radius: 30;" text="Update">
+            <Button fx:id="UserUpdateButton" layoutX="160.0" layoutY="20.0" mnemonicParsing="false" onAction="#UserUpdateButtonOnAction" prefHeight="60.0" prefWidth="140.0" style="-fx-background-radius: 30;" text="Update">
                <font>
-                  <Font name="Book Antiqua" size="24.0" />
+                  <Font name="Book Antiqua" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="CadetDeleteButton" layoutX="166.0" layoutY="87.0" mnemonicParsing="false" onAction="#CadetDeleteButtonOnAction" prefHeight="68.0" prefWidth="148.0" style="-fx-background-radius: 30;" text="Delete">
+            <Button fx:id="UserDeleteButton" layoutX="160.0" layoutY="90.0" mnemonicParsing="false" onAction="#UserDeleteButtonOnAction" prefHeight="60.0" prefWidth="140.0" style="-fx-background-radius: 30;" text="Delete">
                <font>
-                  <Font name="Book Antiqua" size="24.0" />
+                  <Font name="Book Antiqua" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="CadetClearButton" layoutX="8.0" layoutY="86.0" mnemonicParsing="false" onAction="#CadetClearButtonOnAction" prefHeight="68.0" prefWidth="148.0" style="-fx-background-radius: 30;" text="Clear">
+            <Button fx:id="UserClearButton" layoutX="10.0" layoutY="90.0" mnemonicParsing="false" onAction="#UserClearButtonOnAction" prefHeight="60.0" prefWidth="140.0" style="-fx-background-radius: 30;" text="Clear">
                <font>
-                  <Font name="Book Antiqua" size="24.0" />
+                  <Font name="Book Antiqua" size="20.0" />
                </font>
             </Button>
          </children>

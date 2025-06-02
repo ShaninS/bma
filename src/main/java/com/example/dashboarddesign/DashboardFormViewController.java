@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DashboardFormViewController {
-    // UI Components
+
     @FXML private Label TotalCadetCountLabel;
-    @FXML private Label TotalCommandoCountLabel;
+    /*@FXML private Label TotalCommandoCountLabel;
     @FXML private Label TotalEquipCountLabel;
     @FXML private Label TotalInstructorCountLabel;
-    @FXML private Label TotalMOCountLabel;
+    @FXML private Label TotalMOCountLabel;*/
     @FXML private Label TotalUserCountLabel;
 
     // Constants for binary file names
@@ -23,7 +23,7 @@ public class DashboardFormViewController {
     // private static final String EQUIPMENT_FILE = "Equipment.bin";
     // private static final String INSTRUCTOR_FILE = "Instructor.bin";
     // private static final String MO_FILE = "MO.bin";
-    // private static final String USER_FILE = "User.bin";
+    private static final String USER_FILE = "User.bin";
 
     @FXML
     public void initialize() {
@@ -33,7 +33,7 @@ public class DashboardFormViewController {
         // updateTotalEquipCount();
         // updateTotalInstructorCount();
         // updateTotalMOCount();
-        // updateTotalUserCount();
+        updateTotalUserCount();
     }
 
     // Generic method to count records from any binary file
@@ -75,13 +75,13 @@ public class DashboardFormViewController {
     private void updateTotalMOCount() {
         int count = getRecordCount(MO_FILE);
         TotalMOCountLabel.setText(String.valueOf(count));
-    }
-
-    private void updateTotalUserCount() {
-        int count = getRecordCount(USER_FILE);
-        TotalUserCountLabel.setText(String.valueOf(count));
     }*/
 
+    private void updateTotalUserCount() {
+        int count = getRecordCount(USER_FILE) + getRecordCount(CADET_FILE);
+        TotalUserCountLabel.setText(String.valueOf(count));
+    }
+    /*
     // Refresh all counts (can be called from other controllers when data changes)
     public void refreshAllCounts() {
         updateTotalCadetCount();
@@ -89,6 +89,6 @@ public class DashboardFormViewController {
         updateTotalEquipCount();
         updateTotalInstructorCount();
         updateTotalMOCount();
-        updateTotalUserCount();*/
-    }
+        updateTotalUserCount();
+    }*/
 }

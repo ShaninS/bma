@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="532.0" prefWidth="940.0" style="-fx-background-color: gray; -fx-background-radius: 40;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboarddesign.DashboardFormViewController">
+<AnchorPane prefHeight="532.0" prefWidth="940.0" style="-fx-background-radius: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.dashboarddesign.DashboardFormViewController">
     <children>
-        <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="532.0" prefWidth="940.0" style="-fx-background-color: #9EBC8A; -fx-background-radius: 40;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-1.0">
+        <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="532.0" prefWidth="940.0" style="-fx-background-radius: 20;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="-1.0">
             <children>
                 <Pane layoutX="59.0" layoutY="71.0" prefHeight="184.0" prefWidth="253.0" style="-fx-background-color: #626F47; -fx-background-radius: 35;">
                     <children>

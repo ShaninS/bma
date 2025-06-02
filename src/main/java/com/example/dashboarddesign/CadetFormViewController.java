@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +14,17 @@ public class CadetFormViewController {
     @FXML private TextField CadetIDTextField;
     @FXML private TextField CadetNameTextField;
     @FXML private TextField CadetEmailTextField;
+    @FXML private TextField CadetUsernameTextField;
+    @FXML private TextField CadetPasswordTextField;
+    @FXML private TextField CadetBatchTextField;
+
     @FXML private TableView<Cadet> CadetEntryTable;
     @FXML private TableColumn<Cadet, String> idColumn;
     @FXML private TableColumn<Cadet, String> nameColumn;
     @FXML private TableColumn<Cadet, String> emailColumn;
+    @FXML private TableColumn<Cadet, String> usernameColumn;
+    @FXML private TableColumn<Cadet, String> passwordColumn;
+    @FXML private TableColumn<Cadet, String> batchColumn;
 
     // Data
     private final ObservableList<Cadet> cadetList = FXCollections.observableArrayList();
@@ -26,23 +32,24 @@ public class CadetFormViewController {
 
     @FXML
     public void initialize() {
-        // Initialize only if components are not null
-        if (idColumn != null && nameColumn != null && emailColumn != null) {
-            idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-            nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-            emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        }
+        // Initialize table columns
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+        batchColumn.setCellValueFactory(new PropertyValueFactory<>("batch"));
 
-        if (CadetEntryTable != null) {
-            CadetEntryTable.setItems(cadetList);
-        }
+        // Set table data
+        CadetEntryTable.setItems(cadetList);
 
+        // Load existing data
         loadCadetData();
 
-        if (CadetEntryTable != null) {
-            CadetEntryTable.getSelectionModel().selectedItemProperty().addListener(
-                    (obs, oldSelection, newSelection) -> showCadetDetails(newSelection));
-        }
+        // Set up selection listener
+        CadetEntryTable.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> showCadetDetails(newSelection)
+        );
     }
 
     private void loadCadetData() {
@@ -54,26 +61,17 @@ public class CadetFormViewController {
                     cadetList.setAll(savedCadets);
                 }
             }
-
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("Error loading cadet data: " + e.getMessage());
+            showAlert("Error", "Failed to load cadet data: " + e.getMessage());
         }
     }
-
-
 
     private void saveCadetData() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
             out.writeObject(new ArrayList<>(cadetList));
         } catch (IOException e) {
             showAlert("Error", "Failed to save cadet data: " + e.getMessage());
-            e.printStackTrace();
         }
-    }
-
-    private void setupSelectionListener() {
-        CadetEntryTable.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldSelection, newSelection) -> showCadetDetails(newSelection));
     }
 
     private void showCadetDetails(Cadet cadet) {
@@ -81,19 +79,23 @@ public class CadetFormViewController {
             CadetIDTextField.setText(cadet.getId());
             CadetNameTextField.setText(cadet.getName());
             CadetEmailTextField.setText(cadet.getEmail());
+            CadetUsernameTextField.setText(cadet.getUsername());
+            CadetPasswordTextField.setText(cadet.getPassword());
+            CadetBatchTextField.setText(cadet.getBatch());
         }
     }
 
-
-
-    // Button Actions
     @FXML
     private void CadetAddButtonOnAction() {
         String id = CadetIDTextField.getText().trim();
         String name = CadetNameTextField.getText().trim();
         String email = CadetEmailTextField.getText().trim();
+        String username = CadetUsernameTextField.getText().trim();
+        String password = CadetPasswordTextField.getText().trim();
+        String batch = CadetBatchTextField.getText().trim();
 
-        if (id.isEmpty() || name.isEmpty() || email.isEmpty()) {
+        if (id.isEmpty() || name.isEmpty() || email.isEmpty() ||
+                username.isEmpty() || password.isEmpty() || batch.isEmpty()) {
             showAlert("Missing Information", "Please fill in all fields");
             return;
         }
@@ -103,10 +105,9 @@ public class CadetFormViewController {
             return;
         }
 
-        cadetList.add(new Cadet(id, name, email));
+        cadetList.add(new Cadet(id, name, email, username, password, batch, "Phase 1"));
         saveCadetData();
         clearFields();
-
         showAlert("Success", "Cadet added successfully");
     }
 
@@ -120,14 +121,22 @@ public class CadetFormViewController {
 
         String name = CadetNameTextField.getText().trim();
         String email = CadetEmailTextField.getText().trim();
+        String username = CadetUsernameTextField.getText().trim();
+        String password = CadetPasswordTextField.getText().trim();
+        String batch = CadetBatchTextField.getText().trim();
 
-        if (name.isEmpty() || email.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || username.isEmpty() ||
+                password.isEmpty() || batch.isEmpty()) {
             showAlert("Missing Information", "Please fill in all fields");
             return;
         }
 
         selectedCadet.setName(name);
         selectedCadet.setEmail(email);
+        selectedCadet.setUsername(username);
+        selectedCadet.setPassword(password);
+        selectedCadet.setBatch(batch);
+
         CadetEntryTable.refresh();
         saveCadetData();
         showAlert("Success", "Cadet updated successfully");
@@ -144,7 +153,6 @@ public class CadetFormViewController {
         cadetList.remove(selectedCadet);
         saveCadetData();
         clearFields();
-
         showAlert("Success", "Cadet deleted successfully");
     }
 
@@ -154,11 +162,13 @@ public class CadetFormViewController {
         CadetEntryTable.getSelectionModel().clearSelection();
     }
 
-    // Helper Methods
     private void clearFields() {
         CadetIDTextField.clear();
         CadetNameTextField.clear();
         CadetEmailTextField.clear();
+        CadetUsernameTextField.clear();
+        CadetPasswordTextField.clear();
+        CadetBatchTextField.clear();
     }
 
     private void showAlert(String title, String message) {
