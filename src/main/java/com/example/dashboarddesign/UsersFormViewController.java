@@ -6,9 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UsersFormViewController {
@@ -37,10 +38,11 @@ public class UsersFormViewController {
     @FXML private ComboBox<String> userStatusComboBox;
 
     // Data
-    private ObservableList<User> userList = FXCollections.observableArrayList();
-    private ObservableList<Cadet> cadetList = FXCollections.observableArrayList();
+    private final ObservableList<User> userList = FXCollections.observableArrayList();
+    private final ObservableList<Cadet> cadetList = FXCollections.observableArrayList();
     private static final String USER_FILE = "User.bin";
     private static final String CADET_FILE = "Cadet.bin";
+    private static final String AUDIT_FILE = "UserAudit.bin";
 
     @FXML
     public void initialize() {
@@ -176,7 +178,7 @@ public class UsersFormViewController {
         } catch (FileNotFoundException e) {
             // File doesn't exist yet - that's okay
         } catch (IOException | ClassNotFoundException e) {
-            showAlert("Error", "Failed to load user data: " + e.getMessage());
+            showAlert("Failed to load user data: " + e.getMessage());
         }
 
         // Load cadets
@@ -186,39 +188,43 @@ public class UsersFormViewController {
         } catch (FileNotFoundException e) {
             // File doesn't exist yet - that's okay
         } catch (IOException | ClassNotFoundException e) {
-            showAlert("Error", "Failed to load cadet data: " + e.getMessage());
+            showAlert("Failed to load cadet data: " + e.getMessage());
         }
 
         refreshTable();
     }
 
     private void showDetails(Object item) {
-        if (item == null) return;
+        switch (item) {
+            case null -> {
+                return;
+            }
+            case User user -> {
+                UserIDTextfield.setText(user.getId());
+                UserNameTextfield.setText(user.getName());
+                UserEmailTextfield.setText(user.getEmail());
+                UserUserNameTextfield.setText(user.getUsername());
+                UserUserPasswordTextfield.setText(user.getPassword());
+                UserBatchTextfield.setText("");
+                userTypeComboBox.getSelectionModel().select("User");
+                userRoleComboBox.getSelectionModel().select(user.getRole());
+                userStatusComboBox.getSelectionModel().select(user.getStatus());
+            }
+            case Cadet cadet -> {
+                UserIDTextfield.setText(cadet.getId());
+                UserNameTextfield.setText(cadet.getName());
+                UserEmailTextfield.setText(cadet.getEmail());
+                UserUserNameTextfield.setText(cadet.getUsername());
+                UserUserPasswordTextfield.setText(cadet.getPassword());
+                UserBatchTextfield.setText(cadet.getBatch());
+                userTypeComboBox.getSelectionModel().select("Cadet");
+                userRoleComboBox.getSelectionModel().select("Cadet");
+                userStatusComboBox.getSelectionModel().select("Active");
+            }
+            default -> {
+            }
+        }
 
-        if (item instanceof User) {
-            User user = (User) item;
-            UserIDTextfield.setText(user.getId());
-            UserNameTextfield.setText(user.getName());
-            UserEmailTextfield.setText(user.getEmail());
-            UserUserNameTextfield.setText(user.getUsername());
-            UserUserPasswordTextfield.setText(user.getPassword());
-            UserBatchTextfield.setText("");
-            userTypeComboBox.getSelectionModel().select("User");
-            userRoleComboBox.getSelectionModel().select(user.getRole());
-            userStatusComboBox.getSelectionModel().select(user.getStatus());
-        }
-        else if (item instanceof Cadet) {
-            Cadet cadet = (Cadet) item;
-            UserIDTextfield.setText(cadet.getId());
-            UserNameTextfield.setText(cadet.getName());
-            UserEmailTextfield.setText(cadet.getEmail());
-            UserUserNameTextfield.setText(cadet.getUsername());
-            UserUserPasswordTextfield.setText(cadet.getPassword());
-            UserBatchTextfield.setText(cadet.getBatch());
-            userTypeComboBox.getSelectionModel().select("Cadet");
-            userRoleComboBox.getSelectionModel().select("Cadet");
-            userStatusComboBox.getSelectionModel().select("Active");
-        }
     }
 
     @FXML
@@ -229,12 +235,12 @@ public class UsersFormViewController {
         String type = userTypeComboBox.getValue();
 
         if (id.isEmpty() || name.isEmpty()) {
-            showAlert("Error", "ID and Name are required!");
+            showAlert("ID and Name are required!");
             return;
         }
 
         if (isDuplicateId(id)) {
-            showAlert("Error", "ID already exists!");
+            showAlert("ID already exists!");
             return;
         }
 
@@ -245,38 +251,39 @@ public class UsersFormViewController {
             String status = userStatusComboBox.getValue();
 
             if (username.isEmpty() || password.isEmpty() || role == null || status == null) {
-                showAlert("Error", "All fields are required for Users!");
+                showAlert("All fields are required for Users!");
                 return;
             }
 
             User newUser = new User(id, name, email, username, password, role, status);
             userList.add(newUser);
             saveUserData();
+            saveAuditLog("ADD", newUser);
         } else {
             String username = UserUserNameTextfield.getText().trim();
             String password = UserUserPasswordTextfield.getText().trim();
             String batch = UserBatchTextfield.getText().trim();
 
             if (username.isEmpty() || password.isEmpty() || batch.isEmpty()) {
-                showAlert("Error", "All fields are required for Cadets!");
+                showAlert("All fields are required for Cadets!");
                 return;
             }
 
             Cadet newCadet = new Cadet(id, name, email, username, password, batch, "Phase 1");
             cadetList.add(newCadet);
             saveCadetData();
+            saveAuditLog("ADD", newCadet);
         }
 
         refreshTable();
         clearForm();
     }
 
-
     @FXML
     private void UserUpdateButtonOnAction(ActionEvent event) {
         Object selected = UserDataEntryTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Error", "No item selected!");
+            showAlert("No item selected!");
             return;
         }
 
@@ -285,25 +292,38 @@ public class UsersFormViewController {
         String email = UserEmailTextfield.getText().trim();
 
         if (id.isEmpty() || name.isEmpty()) {
-            showAlert("Error", "ID and Name are required!");
+            showAlert("ID and Name are required!");
             return;
         }
 
-        if (selected instanceof User) {
-            User user = (User) selected;
+        if (selected instanceof User user) {
+            User originalUser = new User(user.getId(), user.getName(), user.getEmail(),
+                    user.getUsername(), user.getPassword(),
+                    user.getRole(), user.getStatus());
+
             user.setName(name);
             user.setEmail(email);
             user.setUsername(UserUserNameTextfield.getText().trim());
             user.setPassword(UserUserPasswordTextfield.getText().trim());
             user.setRole(userRoleComboBox.getValue());
             user.setStatus(userStatusComboBox.getValue());
+
             saveUserData();
+            saveAuditLog("UPDATE", originalUser);
         }
-        else if (selected instanceof Cadet) {
-            Cadet cadet = (Cadet) selected;
+        else if (selected instanceof Cadet cadet) {
+            Cadet originalCadet = new Cadet(cadet.getId(), cadet.getName(), cadet.getEmail(),
+                    cadet.getUsername(), cadet.getPassword(),
+                    cadet.getBatch(), cadet.getTrainingPhase());
+
             cadet.setName(name);
             cadet.setEmail(email);
+            cadet.setUsername(UserUserNameTextfield.getText().trim());
+            cadet.setPassword(UserUserPasswordTextfield.getText().trim());
+            cadet.setBatch(UserBatchTextfield.getText().trim());
+
             saveCadetData();
+            saveAuditLog("UPDATE", originalCadet);
         }
 
         refreshTable();
@@ -313,18 +333,23 @@ public class UsersFormViewController {
     @FXML
     private void UserDeleteButtonOnAction(ActionEvent event) {
         Object selected = UserDataEntryTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Error", "No item selected!");
-            return;
-        }
-
-        if (selected instanceof User) {
-            userList.remove(selected);
-            saveUserData();
-        }
-        else if (selected instanceof Cadet) {
-            cadetList.remove(selected);
-            saveCadetData();
+        switch (selected) {
+            case null -> {
+                showAlert("No item selected!");
+                return;
+            }
+            case User user -> {
+                saveAuditLog("DELETE", user);
+                userList.remove(selected);
+                saveUserData();
+            }
+            case Cadet cadet -> {
+                saveAuditLog("DELETE", cadet);
+                cadetList.remove(selected);
+                saveCadetData();
+            }
+            default -> {
+            }
         }
 
         refreshTable();
@@ -353,7 +378,7 @@ public class UsersFormViewController {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(USER_FILE))) {
             out.writeObject(new ArrayList<>(userList));
         } catch (IOException e) {
-            showAlert("Error", "Failed to save user data: " + e.getMessage());
+            showAlert("Failed to save user data: " + e.getMessage());
         }
     }
 
@@ -361,8 +386,59 @@ public class UsersFormViewController {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(CADET_FILE))) {
             out.writeObject(new ArrayList<>(cadetList));
         } catch (IOException e) {
-            showAlert("Error", "Failed to save cadet data: " + e.getMessage());
+            showAlert("Failed to save cadet data: " + e.getMessage());
         }
+    }
+
+    private void saveAuditLog(String action, Object entity) {
+        List<UserAudit> auditLogs = loadAuditLogs();
+
+        if (entity instanceof User user) {
+            auditLogs.add(new UserAudit(
+                    new Date(),
+                    action,
+                    "User",
+                    user.getId(),
+                    user.getName(),
+                    user.getEmail(),
+                    user.getUsername(),
+                    user.getRole(),
+                    user.getStatus(),
+                    ""
+            ));
+        } else if (entity instanceof Cadet cadet) {
+            auditLogs.add(new UserAudit(
+                    new Date(),
+                    action,
+                    "Cadet",
+                    cadet.getId(),
+                    cadet.getName(),
+                    cadet.getEmail(),
+                    cadet.getUsername(),
+                    "Cadet",
+                    "Active",
+                    cadet.getBatch()
+            ));
+        }
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(AUDIT_FILE))) {
+            out.writeObject(auditLogs);
+        } catch (IOException e) {
+            showAlert("Failed to save audit log: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<UserAudit> loadAuditLogs() {
+        File file = new File(AUDIT_FILE);
+        if (file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(AUDIT_FILE))) {
+                return (List<UserAudit>) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                showAlert("Failed to load audit logs: " + e.getMessage());
+            }
+        }
+        return new ArrayList<>();
     }
 
     private void clearForm() {
@@ -371,16 +447,40 @@ public class UsersFormViewController {
         UserEmailTextfield.clear();
         UserUserNameTextfield.clear();
         UserUserPasswordTextfield.clear();
+        UserBatchTextfield.clear();
         userTypeComboBox.getSelectionModel().selectFirst();
         userRoleComboBox.getSelectionModel().clearSelection();
         userStatusComboBox.getSelectionModel().clearSelection();
     }
 
-    private void showAlert(String title, String message) {
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public record UserAudit(Date timestamp, String action, String entityType, String userId, String userName,
+                            String userEmail, String username, String role, String status,
+                            String batch) implements Serializable {
+            @Serial
+            private static final long serialVersionUID = 1L;
+
+        @Override
+            public String toString() {
+                return "UserAudit{" +
+                        "timestamp=" + timestamp +
+                        ", action='" + action + '\'' +
+                        ", entityType='" + entityType + '\'' +
+                        ", userId='" + userId + '\'' +
+                        ", userName='" + userName + '\'' +
+                        ", userEmail='" + userEmail + '\'' +
+                        ", username='" + username + '\'' +
+                        ", role='" + role + '\'' +
+                        ", status='" + status + '\'' +
+                        ", batch='" + batch + '\'' +
+                        '}';
+            }
+        }
 }

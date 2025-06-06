@@ -1,8 +1,10 @@
 package com.example.dashboarddesign;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Cadet implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private String id;
@@ -34,6 +36,11 @@ public class Cadet implements Serializable {
     public String getBatch() { return batch; }
     public String getTrainingPhase() { return trainingPhase; }
 
+    // This method is kept for backward compatibility
+    public String getPhase() {
+        return trainingPhase;
+    }
+
     // Setters
     public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
@@ -42,4 +49,18 @@ public class Cadet implements Serializable {
     public void setPassword(String password) { this.password = password; }
     public void setBatch(String batch) { this.batch = batch; }
     public void setTrainingPhase(String trainingPhase) { this.trainingPhase = trainingPhase; }
+
+    // Optional: toString() method for debugging
+    @Override
+    public String toString() {
+        return "Cadet{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", batch='" + batch + '\'' +
+                ", trainingPhase='" + trainingPhase + '\'' +
+                '}';
+    }
 }

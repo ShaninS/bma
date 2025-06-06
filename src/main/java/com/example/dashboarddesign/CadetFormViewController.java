@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CadetFormViewController {
@@ -29,6 +30,7 @@ public class CadetFormViewController {
     // Data
     private final ObservableList<Cadet> cadetList = FXCollections.observableArrayList();
     private static final String FILE_NAME = "Cadet.bin";
+    private static final String FILE_NAME_AUDIT = "CadetAudit.bin";
 
     @FXML
     public void initialize() {
@@ -74,6 +76,38 @@ public class CadetFormViewController {
         }
     }
 
+    private void saveAuditLog(String action, Cadet cadet) {
+        List<CadetAudit> auditLogs = loadAuditLogs();
+        auditLogs.add(new CadetAudit(
+                new Date(),
+                action,
+                cadet.getId(),
+                cadet.getName(),
+                cadet.getEmail(),
+                cadet.getUsername(),
+                cadet.getBatch()
+        ));
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME_AUDIT))) {
+            out.writeObject(auditLogs);
+        } catch (IOException e) {
+            showAlert("Error", "Failed to save audit log: " + e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<CadetAudit> loadAuditLogs() {
+        File file = new File(FILE_NAME_AUDIT);
+        if (file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME_AUDIT))) {
+                return (List<CadetAudit>) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                showAlert("Error", "Failed to load audit logs: " + e.getMessage());
+            }
+        }
+        return new ArrayList<>();
+    }
+
     private void showCadetDetails(Cadet cadet) {
         if (cadet != null) {
             CadetIDTextField.setText(cadet.getId());
@@ -105,8 +139,10 @@ public class CadetFormViewController {
             return;
         }
 
-        cadetList.add(new Cadet(id, name, email, username, password, batch, "Phase 1"));
+        Cadet newCadet = new Cadet(id, name, email, username, password, batch, "Phase 1");
+        cadetList.add(newCadet);
         saveCadetData();
+        saveAuditLog("ADD", newCadet);
         clearFields();
         showAlert("Success", "Cadet added successfully");
     }
@@ -131,6 +167,17 @@ public class CadetFormViewController {
             return;
         }
 
+        // Create a copy of the original cadet for audit purposes
+        Cadet originalCadet = new Cadet(
+                selectedCadet.getId(),
+                selectedCadet.getName(),
+                selectedCadet.getEmail(),
+                selectedCadet.getUsername(),
+                selectedCadet.getPassword(),
+                selectedCadet.getBatch(),
+                selectedCadet.getPhase()
+        );
+
         selectedCadet.setName(name);
         selectedCadet.setEmail(email);
         selectedCadet.setUsername(username);
@@ -139,6 +186,7 @@ public class CadetFormViewController {
 
         CadetEntryTable.refresh();
         saveCadetData();
+        saveAuditLog("UPDATE", originalCadet);
         showAlert("Success", "Cadet updated successfully");
     }
 
@@ -152,6 +200,7 @@ public class CadetFormViewController {
 
         cadetList.remove(selectedCadet);
         saveCadetData();
+        saveAuditLog("DELETE", selectedCadet);
         clearFields();
         showAlert("Success", "Cadet deleted successfully");
     }
@@ -178,4 +227,23 @@ public class CadetFormViewController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    record CadetAudit(Date timestamp, String action, String cadetId, String cadetName, String cadetEmail,
+                      String cadetUsername, String cadetBatch) implements Serializable {
+
+        @Override
+            public String toString() {
+                return "CadetAudit{" +
+                        "timestamp=" + timestamp +
+                        ", action='" + action + '\'' +
+                        ", cadetId='" + cadetId + '\'' +
+                        ", cadetName='" + cadetName + '\'' +
+                        ", cadetEmail='" + cadetEmail + '\'' +
+                        ", cadetUsername='" + cadetUsername + '\'' +
+                        ", cadetBatch='" + cadetBatch + '\'' +
+                        '}';
+            }
+        }
+
 }
+
